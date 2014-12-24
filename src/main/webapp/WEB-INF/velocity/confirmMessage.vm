@@ -1,0 +1,35 @@
+<html>
+
+<style type="text/css"> 
+   </style>
+    <body style='background-color:#F6F6F6;;'>
+    		    
+        <h3>Bonjour Monsieur ${collaborateur.nom} ${collaborateur.prenom}</h3>
+        <p>
+           le Responsable de formtion Mr. ${resp_f.nom} ${resp_f.prenom} vous invitez a une nouvelle formation de ${inscription.session.formation.titre}
+        </p> 
+        <h3>
+           clique sur le lien ci-dessous pour confirmer l'inscription <br/><br/>
+            <button id='buton' type="button"> 
+            	<a href="http://${serverUrl}/${inscription.id_insc}/confirmation_insc/${collaborateur.id_u}/confirm">confirmer</a>
+        	</button>
+        	<button id='buton' type="button"> 
+            	<a href="http://${serverUrl}/${inscription.id_insc}/confirmation_insc/${collaborateur.id_u}/cancel">annuler</a>
+        	</button>
+        </h3><br/>
+        <p>
+            merci
+        </p><br/>
+        <p>
+            Cordialement
+        </p><br/>
+ 
+        
+              
+        </h3>
+        <p>
+            
+        </p>
+    </body>
+ 
+</html>

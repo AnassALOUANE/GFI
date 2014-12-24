@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+		<!-- la configuration de JavamailSender pour l'envoi des emails  -->
+		<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+			<property name="host" value="smtp.gmail.com" />
+			<property name="port" value="587" />
+			<property name="username" value="sqli.gfi@gmail.com" />
+			<property name="password" value="sqli.gfi12345" />
+			
+			<property name="javaMailProperties">
+				<props>
+					<prop key="mail.smtp.auth">true</prop>
+					<prop key="mail.smtp.starttls.enable">true</prop>
+				</props>
+			</property>
+		
+		</bean>
+		<!-- la configuration velocity template pour envoyer les emails sous forme de page web  -->
+		<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+			<property name="resourceLoaderPath" value="/WEB-INF/velocity/" />
+			<property name="velocityEngine" ref="velocityEngine"/>
+		</bean>
+	
+		<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+			<property name="resourceLoaderPath" value="/WEB-INF/velocity/" />
+			<property name="velocityProperties">
+				<props>
+					<prop key="resource.loader">file,springMacro</prop>
+					<prop key="springMacro.resource.loader.class">org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader</prop>
+	                <prop key="velocimacro.library">org/springframework/web/servlet/view/velocity/spring.vm</prop>
+				</props>
+			</property>
+		</bean>
+		
+		
+		
+
+</beans>

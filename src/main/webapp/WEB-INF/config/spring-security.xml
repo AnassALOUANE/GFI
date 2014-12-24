@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+xmlns:beans="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-3.2.xsd"> 
+	
+		<http>
+			<intercept-url pattern="/welcome/anonymous" access="ROLE_ANONYMOUS,ROLE_COL,ROLE_RESP_F,ROLE_FOR,ROLE_ADMIN" />
+			<intercept-url pattern="/welcome/index" access="ROLE_COL,ROLE_RESP_F,ROLE_FOR" />
+			<intercept-url pattern="/formation/**" access="ROLE_RESP_F" />
+			<intercept-url pattern="/action/**" access="ROLE_ADMIN" />
+			<intercept-url pattern="/users/**" access="ROLE_ADMIN" />
+			<intercept-url pattern="/users/c/*" access="ROLE_ADMIN" />
+			<intercept-url pattern="/users/f/*" access="ROLE_ADMIN" />
+			<intercept-url pattern="/users/resp_f/*" access="ROLE_ADMIN" />
+			<intercept-url pattern="/profile/**" access="ROLE_ADMIN" />
+			<intercept-url pattern="/compte/**" access="ROLE_ADMIN" />
+			<intercept-url pattern="/absence/**" access="ROLE_FOR,ROLE_ADMIN" />
+<!-- 			<http-basic /> -->
+<!--authentication-failure-url="/login?error=true" -->
+			<form-login login-processing-url="/auth" login-page="/login"  authentication-failure-url="/login?authfailed" default-target-url="/welcome/index"
+			authentication-success-handler-ref="gfi_AuthenticationSuccessHandler" />
+			<logout  logout-success-url="/login?logout"/>
+			<access-denied-handler error-page="/403" />
+			<remember-me />
+		</http>
+		
+		<beans:bean id="gfi_AuthenticationSuccessHandler" 
+				class="com.sqli.gfi.security.GFI_UrlAuthenticationSuccessHandler" />
+		
+		<authentication-manager>
+			<authentication-provider>
+<!-- 				<user-service> -->
+<!-- 					<user name="admin" password="secret" -->
+<!-- 					authorities="ROLE_ADMIN,ROLE_USER" /> -->
+<!-- 					<user name="user1" password="1111" authorities="ROLE_USER" /> -->
+<!-- 				</user-service> -->
+<!-- 				<jdbc-user-service data-source-ref="dataSource" /> -->
+
+			<password-encoder hash="md5" />
+			
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="SELECT login as username, password, active as enabled FROM compte WHERE login = ?"
+				authorities-by-username-query="SELECT compte.login as username, action.libelle as authorities 
+												FROM compte, utilisateur, profile, action
+												WHERE compte.login = ? AND compte.id_compte = utilisateur.id_compte
+												AND utilisateur.id_profile = profile.id_profile 
+												AND profile.id_profile = action.id_profile" />
+												
+<!-- 												SELECT compte.login as username, compte_role.role as authorities  -->
+<!-- 												FROM compte, compte_role -->
+<!-- 												WHERE compte.login = ? AND compte.id_u = compte_role.compte_id -->
+												
+			</authentication-provider>
+		</authentication-manager>
+	
+</beans:beans>
